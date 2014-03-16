@@ -1,4 +1,4 @@
-clone-them-all
+Clone Them All
 ==============
 
 Clones all of a user's repositories.
