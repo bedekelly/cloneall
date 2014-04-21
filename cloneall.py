@@ -1,3 +1,4 @@
+#!/usr/bin/python3
 """
 cloneall.py
 
@@ -72,6 +73,8 @@ def main():
     arguments = parse_args(sys.argv)
     if not arguments['username']:
         arguments['username'] = input("Username: ")
+    if not arguments['all']:
+        arguments['all'] = True if input("Download all? [Y/N] ") in ['Y', 'y'] else False
     my_api_url = api_url(arguments['username'])
     json_data = get_json(my_api_url)
     # Make a shorter, more manageable list:
@@ -79,27 +82,28 @@ def main():
               'description': repo['description']} for repo in json_data]
     if len(repos) >= 1:
         for repo in repos:
-            if arguments['all']:
-                # Skip printing repo info
-                subprocess.check_call(["git", "clone", repo['git_url']])
-            else:
-                print_repo_info(repo)
-                while True:
-                    yesno = input("Clone repository? [Y/N/Q] ")
-                    if yesno.lower() == 'y':
-                        subprocess.check_call(["git", "clone", repo['git_url']])
-                        break
-                    elif yesno.lower() == 'n':
-                        print("Repository skipped.")
-                        break
-                    elif yesno.lower() == 'q':
-                        print("Exiting.")
-                        quit()
+            try:
+                if arguments['all']:
+                    # Skip printing repo info
+                    subprocess.call(["git", "clone", repo['git_url']])
+                else:
+                    print_repo_info(repo)
+                    while True:
+                        yesno = input("Clone repository? [Y/N/Q] ")
+                        if yesno.lower() == 'y':
+                            subprocess.call(["git", "clone", repo['git_url']])
+                            break
+                        elif yesno.lower() == 'n':
+                            print("Repository skipped.")
+                            break
+                        elif yesno.lower() == 'q':
+                            print("Exiting.")
+                            quit()
+            except subprocess.CalledProcessError:
+                pass  # Error message shown anyway.
     else:
         print("User has no publicly available repositories.")
 
 
 if __name__ == "__main__":
     main()
-else:
-    print("This utility cannot be imported.")
