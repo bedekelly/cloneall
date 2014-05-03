@@ -130,12 +130,14 @@ def main():
     # Get info if it hasn't been specified in parameters.
     if not arguments['username']:
         arguments['username'] = get_username()
-    if not arguments['all']:
-        arguments['all'] = get_all()
+
 
     # Get info from fetched JSON data.
     my_api_url = api_url(arguments['username'])
     json_data = get_json(my_api_url)
+
+    if not arguments['all']:
+        arguments['all'] = get_all()
 
     # Make a shorter, more manageable list of dictionaries:
     # (also makes sure github url is using HTTPS connection)
