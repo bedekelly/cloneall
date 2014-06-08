@@ -32,7 +32,7 @@ def get_json(url):
 
 def api_url(username):
     """Returns github api url for a given username."""
-    return "https://api.github.com/users/{}/repos".format(username)
+    return "https://api.github.com/users/{}/repos?per_page=100".format(username)
 
 
 def parse_args():
@@ -144,7 +144,6 @@ def main():
     repos = [{'name': repo['name'],
               'git_url': "https://" + repo['git_url'][6:],
               'description': repo['description']} for repo in json_data]
-
     download_repos(repos, arguments)
 
 
