@@ -12,3 +12,8 @@ If the username is not given, the program will ask for it to be entered.
 
 Example Usage:
 	http://asciinema.org/a/9295
+
+###Wishlist:
+
+* Update git repositories automatically
+* Support more than 100 repositories per user

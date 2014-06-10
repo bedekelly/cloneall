@@ -16,6 +16,7 @@ Usage:
 import json
 import urllib.request
 import sys
+import os
 import subprocess
 from pprint import pprint
 
@@ -87,7 +88,28 @@ def get_username():
 
 def clone_repo(repository):
     """Clones the repository passed to it using the git shell interface."""
-    subprocess.call(["git", "clone", repository['git_url']])
+    devnull = open(os.devnull, "w")
+    try:
+        subprocess.check_call(["git", "clone", repository['git_url']],
+                                stderr=devnull)
+    except subprocess.CalledProcessError:
+        while True:
+            choice = input("Repository {} already exists here, update? [Y/N] "
+                            .format(repository['name']))
+            if choice.lower() in ["y", "n"]:
+                break
+        if choice.lower() == 'y':
+            try:
+                os.chdir(repository['name'])
+            except:
+                print("Something's gone wrong, will ignore repository.")
+            else:
+                try:
+                    output = subprocess.check_output(["git", "pull"])
+                    print(output.decode(sys.stdout.encoding))
+                except subprocess.CalledProcessError:
+                    print("Something went badly wrong.")
+                os.chdir("..")
 
 
 def download_repos(repos, arguments):
@@ -120,7 +142,7 @@ def download_repos(repos, arguments):
                             return
 
             except subprocess.CalledProcessError:
-                pass  # Error message shown anyway.
+                pass  # Error message printed anyway.
     else:
         print("User has no publicly available repositories.")
 
