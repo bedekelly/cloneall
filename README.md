@@ -15,5 +15,6 @@ Example Usage:
 
 ###Wishlist:
 
-* Update git repositories automatically  ✓
+* Add "update repository" feature  ✓
+* Add "update all" option
 * Support more than 100 repositories per user
