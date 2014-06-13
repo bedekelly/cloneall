@@ -18,3 +18,6 @@ Example Usage:
 * Add "update repository" feature  ✓
 * Add "update all" option
 * Support more than 100 repositories per user
+* Add ncurses front-end
+* Add checks for git, python version etc.
+* Persistence (only make these checks once)
