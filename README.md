@@ -1,7 +1,9 @@
 Clone Them All
 ==============
 
-Clones all of a user's repositories.
+Clones and updates a user's repositories.
+
+Now on PyPI! Run `sudo pip3 install SimpleMenu cloneall` for the full install, or just `sudo pip3 install cloneall` for the minimal version (without ncurses menus). To run the program, just type `cloneall` and then any options you want.
 
 ###Usage:
 	python cloneall.py [-a|--all] [-u username] [--no-curses]
