@@ -312,13 +312,17 @@ try:
             except ImportError:
                 pass
             else:
-                from SimpleMenu import Menu
-                # _menu suffix denotes a Curses menu alternative.
-                should_update_repository = should_ud_repo_menu
-                should_download_repository = should_dl_repo_menu
-                should_update_all = should_ud_all_menu
-                should_download_all = should_dl_all_menu
-
+            	try:
+	                from SimpleMenu import Menu
+	                # _menu suffix denotes a Curses menu alternative.
+	                should_update_repository = should_ud_repo_menu
+	                should_download_repository = should_dl_repo_menu
+	                should_update_all = should_ud_all_menu
+	                should_download_all = should_dl_all_menu
+	            except ImportError:
+	            	# SimpleMenu not present
+	            	print("Menu support requires SimpleMenu.py, will fall"
+	            		  " back to standard input.")
         main()
 
 except (KeyboardInterrupt, EOFError):
