@@ -1,14 +1,16 @@
 #!/usr/bin/python3
 """
 cloneall.py
+Clones all of a user's repositories.
 
-A small command-line tool to clone all of a given username's public GitHub
-repositories into the working directory.
+Usage:
+    python cloneall.py [-a|--all] [-u username] [--no-curses]
 
-Username is optional as an argument as it can be set within the program.
-
-Usage: 
-    python cloneall.py [-a|--all] [username]
+(+) If the -a or --all flag is not set, the script will ask about each repository in turn.
+(+) If the --no-curses option is given, the program will use the standard input method.
+(+) If --no-curses is not given, the program defaults to using Curses if installed, falling
+    back to the standard method if necessary.
+(+) If the username is not given, the program will ask for it to be entered.
 
 """
 try:
@@ -22,7 +24,7 @@ try:
 
 
     def get_json(url):
-        """Takes url as argument, returns json data."""
+        """Takes url as argument, returns json data from GitHub."""
         try:
             data = urllib.request.urlopen(url).read().decode("utf-8")
         except urllib.error.HTTPError:
@@ -40,7 +42,8 @@ try:
 
     def parse_args():
         """
-        Returns a dictionary in the format
+        Sifts through the command-line arguments given.
+        Returns a dictionary in the format:
         {username:<string>,
          dl_all:<boolean>,  # Should download all user's repos
          ud_all:<boolean>,  # Should update all existing repos
@@ -293,10 +296,6 @@ try:
         download_repos(repos, arguments)
 
 
-    def curses_main():
-        ...
-
-
     if __name__ == "__main__":
         # Check if Git is installed (vital).
         try:
@@ -319,6 +318,7 @@ try:
                 should_download_repository = should_dl_repo_menu
                 should_update_all = should_ud_all_menu
                 should_download_all = should_dl_all_menu
+
         main()
 
 except (KeyboardInterrupt, EOFError):
