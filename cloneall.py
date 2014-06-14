@@ -42,8 +42,9 @@ try:
         """
         Returns a dictionary in the format
         {username:<string>,
-         dl_all:<boolean>,  # should download all repos
-         ud_all:<boolean>}  # should update all existing repos
+         dl_all:<boolean>,  # Should download all user's repos
+         ud_all:<boolean>,  # Should update all existing repos
+         no_dl:<boolean>}   # Only update existing repos
         """
         args = sys.argv[1:]  # Don't include filename.
 
@@ -81,7 +82,9 @@ try:
                     return_dict['username'] = args[args.index("--username") + 1]
                 elif "-u" in args:
                     return_dict['username'] = args[args.index("-u") + 1]
+
             except IndexError:
+                # User typed an option after -u, instead of a username.
                 print(__doc__)
                 quit()
         return return_dict
@@ -102,6 +105,17 @@ try:
                 return False
 
 
+    def should_dl_all_menu():
+        """Curses menu for should_download_all."""
+        newmenu = Menu("Yes", "No", title="Download all repositories?")
+        choice = newmenu.show()
+        if choice:
+            return choice == "Yes"
+        # Choice is None, user pressed Q.
+        print("Exiting.")
+        quit()
+
+
     def should_update_all():
         """Provides a prompt to query whether all items should be updated."""
         while True:
@@ -110,6 +124,17 @@ try:
                 return True
             elif get_all in ['N', 'n']:
                 return False
+
+
+    def should_ud_all_menu():
+        """Curses menu for should_update_all."""
+        newmenu = Menu("Yes", "No", title="Update all existing repositories?")
+        choice = newmenu.show()
+        if choice:
+            return choice == "Yes"
+        # Choice is None, user pressed Q.
+        print("Exiting.")
+        quit()
 
 
     def get_username():
@@ -122,8 +147,9 @@ try:
 
     def clone_repo(repository, arguments):
         """Clones the repository passed to it using the git program."""
-        devnull = open(os.devnull, "w")
+        devnull = open(os.devnull, "w")  # Allow writing to null
         try:
+            # Try cloning; write all errors to null and catch them here.
             subprocess.check_call(["git", "clone", repository['git_url']],
                                     stderr=devnull)
         except subprocess.CalledProcessError:
@@ -146,12 +172,54 @@ try:
         return choice.lower() == 'y'
 
 
+    def should_ud_repo_menu(repo_name):
+        """Curses version of should_update_repository."""
+        menu_title = "Repository {} already exists. Update?".format(repo_name)
+        menu = Menu("Yes", "No", title=menu_title)
+        choice = menu.show()
+        if choice:
+            return choice == "Yes"
+        # Choice is None, user pressed Q.
+        print("Exiting.")
+        quit()
+
+
+    def should_download_repository(repo):
+        """Provides a prompt to ask the user to download a repository."""
+        print_repo_info(repo)  # Display name and description.
+        while True:
+            yesno = input("Clone repository? [Y/A/N/Q] ")
+            if yesno.lower() in ["y", "n", "a"]:
+                return yesno.lower()
+            elif yesno.lower() == "q":
+                quit()
+
+
+    def should_dl_repo_menu(repo):
+        """Curses version of should_download_repo."""
+        menu = Menu("Download",
+                    "Skip",
+                    "Download All",
+                    title=repo['name'],
+                    subtitle=repo['description'])
+        choice = menu.show()
+        # Required for interchangeability with non-curses input.
+        choice_dict = {"Download": "y",
+                       "Skip": "n",
+                       "Download All": "a"}
+        if choice:
+            return choice_dict[choice]
+        # Choice is None, user pressed Q.
+        quit()
+
+
     def update_repository(repo_name):
         """Updates a given repository."""
         print("\nUpdating {}.".format(repo_name))
         try:
+            # Change into repo directory.
             os.chdir(repo_name)
-        except:
+        except:  # Catch-all
             print("Something's gone wrong, will ignore repository.")
         else:
             try:
@@ -159,6 +227,7 @@ try:
                 # Output is a byte string, need to decode.
                 print(output.decode(sys.stdout.encoding))
             except subprocess.CalledProcessError:
+                # Shouldn't happen with working Git.
                 print("Something went badly wrong.")
             os.chdir("..")
 
@@ -174,27 +243,15 @@ try:
                     elif arguments['ud_all'] and os.path.exists(repo['name']):
                         update_repository(repo['name'])
                     elif not arguments['no_dl']:
-                        print_repo_info(repo)  # Display name and description.
-                        while True:
-                            yesno = input("Clone repository? [Y/A/N/Q] ")
-                            if yesno.lower() == 'y':
-                                clone_repo(repo, arguments)
-                                break
-
-                            elif yesno.lower() == 'n':
-                                print("Repository skipped.")
-                                break
-
-                            elif yesno.lower() == 'a':
-                                clone_repo(repo, arguments)
-                                arguments['dl_all'] = True
-                                break
-
-                            elif yesno.lower() == 'q':
-                                print("Exiting.")
-                                return
+                        choice = should_download_repository(repo)
+                        if choice == "y":
+                            clone_repo(repo, arguments)
+                        elif choice == "a":
+                            clone_repo(repo, arguments)
+                            arguments['dl_all'] = True
 
                 except subprocess.CalledProcessError:
+                    # Mostly a safety net, this shouldn't happen.
                     pass  # Error message printed anyway.
         else:
             print("User has no publicly available repositories.")
@@ -236,6 +293,10 @@ try:
         download_repos(repos, arguments)
 
 
+    def curses_main():
+        ...
+
+
     if __name__ == "__main__":
         # Check if Git is installed (vital).
         try:
@@ -246,18 +307,20 @@ try:
             quit()
 
         # Check if Curses is installed (nonvital).
-        try:
-            import curses
-        except ImportError:
-            pass
-        else:
-            # _menu suffix denotes a Curses menu alternative.
-            # Will implement soon.
-            ...
-            # main = main_menu
-            # should_update_repository = should_ud_repo_menu
-            # should_update_all = should_ud_all_menu
-            # should_download_all = should_dl_all_menu
+        if "--no-curses" not in sys.argv:
+            try:
+                import curses
+            except ImportError:
+                pass
+            else:
+                from SimpleMenu import Menu
+                # _menu suffix denotes a Curses menu alternative.
+                should_update_repository = should_ud_repo_menu
+                should_download_repository = should_dl_repo_menu
+                should_update_all = should_ud_all_menu
+                should_download_all = should_dl_all_menu
         main()
+
 except (KeyboardInterrupt, EOFError):
+    # User presses C-c or C-d (respectively: kill process or EOF)
     print("\nWill exit now.")
