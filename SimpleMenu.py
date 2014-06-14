@@ -5,7 +5,7 @@ Provides an easy-to-use interface for creating menus with the Curses library.
 """
 
 import curses
-
+import os
 
 class Menu(object):
     def __init__(self, *names, title=None, subtitle=None):
@@ -21,7 +21,7 @@ class Menu(object):
         self.stdscr.keypad(True)
         self.stdscr.clear()
         self.stdscr.border(0)
-
+        width = os.get_terminal_size().columns
 
         # Setup color pairs
         curses.init_pair(1, curses.COLOR_WHITE, curses.COLOR_BLACK)
@@ -36,15 +36,15 @@ class Menu(object):
         # Get y position for title
         if self.title is not None:
             # 3 lines above menu items
-            if len(self.title) > 75:
-                self.title = self.title[:72] + "..."
+            if len(self.title) > width:
+                self.title = self.title[:width - 3] + "..."
             pad = 2 if self.subtitle is None else 3
             self.y_pos_title = y_pos - pad
             self.x_pos_title = (self.stdscr.getmaxyx()[1] - len(self.title)) // 2
 
         if self.subtitle is not None:
-            if len(self.subtitle) > 75:
-                self.subtitle = self.subtitle[:72] + "..."
+            if len(self.subtitle) > width:
+                self.subtitle = self.subtitle[:width - 3] + "..."
             # 1 line below self.title
             self.y_pos_subtitle = self.y_pos_title + 1
             self.x_pos_subtitle = (self.stdscr.getmaxyx()[1]
