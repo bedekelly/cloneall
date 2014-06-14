@@ -16,7 +16,7 @@ back to the standard method if necessary.
 If the username is not given, the program will ask for it to be entered.
 
 Example Usage:
-	http://asciinema.org/a/9295
+	https://asciinema.org/a/10136
 
 ###Wishlist:
 
