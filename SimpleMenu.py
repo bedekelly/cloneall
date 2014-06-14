@@ -22,6 +22,7 @@ class Menu(object):
         self.stdscr.clear()
         self.stdscr.border(0)
         width = os.get_terminal_size().columns
+        width -= 2  # Compensate for border
 
         # Setup color pairs
         curses.init_pair(1, curses.COLOR_WHITE, curses.COLOR_BLACK)
