@@ -30,6 +30,9 @@ try:
         except urllib.error.HTTPError:
             print("Username not found.")
             quit()
+        except urllib.error.URLError:
+            print("Host unknown. Please check your internet connection.")
+            quit()
         else:
             return json.loads(data)
 
