@@ -37,12 +37,6 @@ try:
             return json.loads(data)
 
 
-    def api_url(username):
-        """Returns github api url for a given username."""
-        return "https://api.github.com/users/{}/repos?per_page=100".format(username)
-        # Pass PHP argument per_page with value 100; get 100 results per page.
-
-
     def parse_args():
         """
         Sifts through the command-line arguments given.
@@ -277,6 +271,11 @@ try:
         # Get info if it hasn't been specified in parameters.
         if not arguments['username']:
             arguments['username'] = get_username()
+
+        api_url = lambda username: "https://api.github.com/users/"\
+        						   "{}/repos?per_page=100".format(username)
+
+
 
         # Get info from fetched JSON data.
         my_api_url = api_url(arguments['username'])
