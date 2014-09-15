@@ -1,4 +1,4 @@
-#!/usr/bin/python3
+#!/usr/bin/env python3
 """
 cloneall.py
 Clones all of a user's repositories.
@@ -311,8 +311,12 @@ try:
         if "--no-curses" not in sys.argv:
             try:
                 import curses
+               	os.get_terminal_size
             except ImportError:
                 pass
+            except AttributeError:
+            	print("Fetching terminal size not supported, falling back to "
+            		  "standard input.")
             else:
                 try:
                     from SimpleMenu import Menu
