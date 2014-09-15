@@ -1,4 +1,3 @@
-#!/usr/bin/python3
 """
 SimpleMenu.py
 Provides an easy-to-use interface for creating menus with the Curses library.
@@ -8,7 +7,7 @@ import curses
 import os
 
 class Menu(object):
-    def __init__(self, *names, title=None, subtitle=None):
+    def __init__(self, names, title=None, subtitle=None):
         self.title = title
         self.subtitle = subtitle
         # Setup a window object etc., misc Curses stuff.
