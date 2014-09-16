@@ -3,7 +3,7 @@ Clone Them All
 
 Clones and updates a user's repositories.
 
-![PyPI version](https://pypip.in/v/cloneall/badge.png)
+![PyPI version](https://pypip.in/v/cloneall/badge.png)     
 [![PyPI downloads](https://pypip.in/d/cloneall/badge.png)](https://crate.io/packages/cloneall)
 
 Now on PyPI! Run `sudo pip3 install SimpleMenu cloneall` for the full install, or just `sudo pip3 install cloneall` for the minimal version (without ncurses menus). To run the program, just type `cloneall` and then any options you want.
