@@ -107,7 +107,7 @@ try:
 
     def should_dl_all_menu():
         """Curses menu for should_download_all."""
-        newmenu = Menu("Yes", "No", title="Download all repositories?")
+        newmenu = Menu(["Yes", "No"], title="Download all repositories?")
         choice = newmenu.show()
         if choice:
             return choice == "Yes"
@@ -128,7 +128,7 @@ try:
 
     def should_ud_all_menu():
         """Curses menu for should_update_all."""
-        newmenu = Menu("Yes", "No", title="Update all existing repositories?")
+        newmenu = Menu(["Yes", "No"], title="Update all existing repositories?")
         choice = newmenu.show()
         if choice:
             return choice == "Yes"
