@@ -1,7 +1,7 @@
 #!/usr/bin/python3
 from distutils.core import setup
 setup(name='cloneall',
-	  version='1.2.3',
+	  version='1.2.4',
 	  description="Clone GitHub repositories",
 	  author="Bede Kelly",
 	  author_email="bedekelly97@gmail.com",
