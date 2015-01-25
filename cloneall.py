@@ -14,8 +14,8 @@ Usage:
 
 """
 
-# Import libraries
 import json
+import readline
 import urllib.request
 import sys
 import os
@@ -35,7 +35,7 @@ def get_json(url):
         print("Host unknown. Please check your internet connection.")
         quit()
     except ValueError:
-        print("Connection error - please check your internet connnection is working. This error is often encountered when behind a proxy or captive portal.")
+        print("Connection error - please check your internet connnection is working. This error is often encountered when unauthenticated using a proxy or captive portal.")
         quit()
     else:
         return json_
@@ -257,8 +257,8 @@ def download_repos(repos, arguments):
             except subprocess.CalledProcessError:
                 # Mostly a safety net, this shouldn't happen.
                 pass  # Error message printed anyway.
-            else:
-                print("User has no publicly available repositories.")
+    else:
+        print("User has no publicly available repositories.")
 
 
 def format_url(url):
@@ -271,23 +271,21 @@ def main():
     carries out the instructions."""
     # Collect command-line switches.
     arguments = parse_args()
-    
+
     # Get info if it hasn't been specified in parameters.
     if not arguments['username']:
         arguments['username'] = get_username()
         
-    api_url = lambda username: "https://api.github.com/users/"\
-              "{}/repos?per_page=100".format(username)
-
-
+    api_url = "https://api.github.com/users/"\
+              "{}/repos?per_page=100".format
 
     # Get info from fetched JSON data.
     my_api_url = api_url(arguments['username'])
     json_data = get_json(my_api_url)
     
+    # If info not specified, request it now.
     if not (arguments['dl_all'] or arguments['no_dl']):
         arguments['dl_all'] = should_download_all()
-        
     if not arguments['ud_all']:
         arguments['ud_all'] = should_update_all()
 
@@ -322,18 +320,18 @@ if __name__ == "__main__":
         else:
             try:
                 from SimpleMenu import Menu
-                # _menu suffix denotes a Curses menu alternative.
+                # Replace text menus with curses alternatives in the global namespace
                 should_update_repository = _curses_should_update_repository
                 should_download_repository = _curses_should_download_repository
                 should_update_all = _curses_should_update_all
                 should_download_all = _curses_should_download_all
             except ImportError:
-                # SimpleMenu not present
+                # SimpleMenu not present, can't have replaced any menus
                 print("Menu support requires SimpleMenu.py, will fall"
                       " back to standard input.")
-        try:
-            main()
-        except (KeyboardInterrupt, EOFError):
-            # User presses C-c or C-d (respectively: kill process or EOF)
-            print("\nWill exit now.")
-            quit()
+    try:
+        main()
+    except (KeyboardInterrupt, EOFError):
+        # User presses C-c or C-d (respectively: kill process or EOF)
+        print("\nWill exit now.")
+        quit()
