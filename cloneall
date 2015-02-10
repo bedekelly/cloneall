@@ -14,8 +14,8 @@ Usage:
 
 """
 
-# Import libraries
 import json
+import readline
 import urllib.request
 import sys
 import os
@@ -35,7 +35,7 @@ def get_json(url):
         print("Host unknown. Please check your internet connection.")
         quit()
     except ValueError:
-        print("Connection error - please check your internet connnection is working. This error is often encountered when behind a proxy or captive portal.")
+        print("Connection error - please check your internet connnection is working. This error is often encountered when unauthenticated using a proxy or captive portal.")
         quit()
     else:
         return json_
