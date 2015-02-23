@@ -162,8 +162,8 @@ def clone_repo(repository, arguments):
             update_repository(repository['name'])
         elif should_update_repository(repository['name']):
             update_repository(repository['name'])
-        else:
-            print("Cloned {} successfully.".format(repository['name']))
+    else:
+        print("Cloned {} successfully.".format(repository['name']))
 
 
 def should_update_repository(repo_name):
