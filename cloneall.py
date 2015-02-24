@@ -1,4 +1,4 @@
-#!/usr/bin/env python3
+#!/usr/bin/env python3.4
 """
 cloneall
 Clones all of a user's repositories.
