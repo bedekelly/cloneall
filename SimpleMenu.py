@@ -1,4 +1,4 @@
-#!/usr/bin/python3
+#!/usr/bin/env python3.4
 """
 SimpleMenu.py
 Provides an easy-to-use interface for creating menus with the Curses library.
