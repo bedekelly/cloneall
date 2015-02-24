@@ -7,7 +7,7 @@ Provides an easy-to-use interface for creating menus with the Curses library.
 import curses
 import os
 
-class Menu(object):
+class Menu:
     """Main object to represent the menu screen. `show` method shows the menu
     and returns the user's choice."""
     def __init__(self, *names, title=None, subtitle=None):
@@ -128,7 +128,7 @@ class Menu(object):
         self.clear_display()
 
 
-class MenuItem(object):
+class MenuItem:
     """Base object for each menu item. Allows selection and text editing."""
     def __init__(self, name, stdscr):
         self.name = name
