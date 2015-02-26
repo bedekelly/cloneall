@@ -7,6 +7,8 @@ Provides an easy-to-use interface for creating menus with the Curses library.
 import curses
 import os
 
+y_pos = 0
+
 class Menu:
     """Main object to represent the menu screen. `show` method shows the menu
     and returns the user's choice."""
@@ -36,9 +38,9 @@ class Menu:
         global y_pos
         y_pos = (self.stdscr.getmaxyx()[0] - len(names)) // 2
 
-        # Get y position for title
+        # Print out the title, if applicable.
         if self.title is not None:
-            # 3 lines above menu items
+            # Place the title 3 lines above menu items.
             if len(self.title) > width:
                 self.title = self.title[:width - 3] + "..."
             pad = 3 if self.subtitle else 2
@@ -46,6 +48,7 @@ class Menu:
             screen_width = self.stdscr.getmaxyx()[1]
             self.x_pos_title = (screen_width - len(self.title)) // 2
 
+        # Print out the subtitle, if applicable.
         if self.subtitle is not None:
             if len(self.subtitle) > width:
                 self.subtitle = self.subtitle[:width - 3] + "..."
@@ -124,8 +127,6 @@ class Menu:
         except KeyboardInterrupt:
             # Don't throw an error, clear_display() restores terminal state.
             pass
-
-        self.clear_display()
 
 
 class MenuItem:
