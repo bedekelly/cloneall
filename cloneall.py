@@ -274,10 +274,9 @@ def download_repos(repos, arguments):
 
 
 def https(url):
-    if url.startswith("https://"):
-        return url
-    elif url.startswith("http://"):
+    if url.startswith("http://"):
         return url[:4] + "s" + url[4:] 
+    return url
 
 
 def main():
