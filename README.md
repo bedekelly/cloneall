@@ -16,7 +16,8 @@ back to the standard method if necessary.
 If the username is not given, the program will ask for it to be entered.
 
 Example Usage:
-	https://asciinema.org/a/10136
+
+[![asciicast](https://asciinema.org/a/10136.png)](https://asciinema.org/a/10136)
 
 ###Wishlist:
 
