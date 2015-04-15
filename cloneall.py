@@ -37,7 +37,8 @@ def get_json(url):
         quit()
     except ValueError:
         # No HTTP error, but incorrect webpage coming through - happens when page is redirected.
-        print("Connection error - please check your internet connnection is working. This error is often encountered when unauthenticated using a proxy or captive portal.")
+        print("Connection error - please check your internet connnection is working."
+              "This error is often encountered when unauthenticated using a proxy or captive portal.")
         quit()
     else:
         return json_
