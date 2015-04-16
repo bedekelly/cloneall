@@ -37,7 +37,8 @@ def get_json(url):
         quit()
     except ValueError:
         # No HTTP error, but incorrect webpage coming through - happens when page is redirected.
-        print("Connection error - please check your internet connnection is working. This error is often encountered when unauthenticated using a proxy or captive portal.")
+        print("Connection error - please check your internet connnection is working."
+              "This error is often encountered when unauthenticated using a proxy or captive portal.")
         quit()
     else:
         return json_
@@ -259,7 +260,8 @@ def download_repos(repos, arguments):
             if arguments['dl_all']:
                 # Skip printing repo info for each one.
                 clone_repo(repo, arguments)
-            if arguments['ud_all'] and os.path.exists(repo['name']):
+                update_repository(repo['name'])
+            elif arguments['ud_all'] and os.path.exists(repo['name']):
                 update_repository(repo['name'])
             elif not arguments['no_dl']:
                 choice = should_download_repository(repo)
