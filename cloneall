@@ -182,11 +182,13 @@ def should_update_repository(repo_name):
     """Provides a prompt to ask the user to update an existing repository."""
     while True:
         # Loop until we get a valid input.
-        choice = input("Repository {} already exists here, update? [Y/N] "
+        choice = input("Repository {} already exists here, update? [Y/N/Q] "
                        .format(repo_name))
-        if choice.lower() in ["y", "n"]:
+        if choice.lower() in ["y", "n", "q"]:
             break
-            return choice.lower() == 'y'
+    if choice.lower() == "q":
+        quit("Exiting.")
+    return choice.lower() == 'y'
 
 
 def _curses_should_update_repository(repo_name):
@@ -197,9 +199,9 @@ def _curses_should_update_repository(repo_name):
     choice = menu.show()
     if choice:
         return choice == "Yes"
-        # Choice is None, user pressed Q.
-        print("Exiting.")
-        quit()
+    # Choice is None, user pressed Q.
+    print("Exiting.")
+    quit()
 
 
 def should_download_repository(repo):
